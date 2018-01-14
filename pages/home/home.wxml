@@ -1,8 +1,11 @@
-<swiper class="swiper" indicator-dots="true" autoplay="true" interval="5000" duration="1000">  
+
+ <swiper class="swiper"  autoplay="true" interval="5000" duration="1000">  
       <block wx:for="{{imageUrls}}" wx:for-index="index" wx:key="*this">  
         <swiper-item>  
-          <image src="{{item}}" class="slide-image" mode="aspectFill"/>  
+          <image src="{{item}}" class="slide-image" mode="aspectFit"/>  
         </swiper-item>  
       </block>  
-</swiper>   
+</swiper> 
+
+<button class="btn" bindtap='gotoGank'>GO TO GANK</button>   
 

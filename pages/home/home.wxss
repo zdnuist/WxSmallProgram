@@ -2,15 +2,18 @@
 
 .swiper-item{
   display: block;
-  height: 150px;
   background: #02b8cd;
 }
 
 .swiper {
-  height: 400rpx;
+  height: 800rpx;
   width: 100%;
 }
 .swiper image {
   height: 100%;
   width: 100%;
+}
+
+.btn {
+  margin: 50rpx;
 }
