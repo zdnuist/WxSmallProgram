@@ -47,5 +47,47 @@ Page({
         }
       }
     })
+  },
+  showActionSheet:function(e){
+    var _url = e.currentTarget.id
+    console.log(_url)
+    wx.showActionSheet({
+      itemList: ['复制链接'],
+      success: function(res){
+        console.log(res)
+        wx.setClipboardData({
+          data: _url,
+          success: function (res) {
+               wx.showToast({
+                    title: '复制成功',
+                    icon: 'success',
+                    duration: 2000
+                  })
+          }
+        })
+        // wx.downloadFile({
+        //   url: _url,
+        //   success: function(res){
+        //     if(res.statusCode === 200){
+        //       var _tempFilePath = res.tempFilePath
+        //       console.log(_tempFilePath)
+        //       wx.saveImageToPhotosAlbum({
+        //         filePath: _tempFilePath,
+        //         success: function(res){
+        //           wx.showToast({
+        //             title: '图片保存成功',
+        //             icon: 'success',
+        //             duration: 2000
+        //           })
+        //         }
+        //       })
+        //     }
+        //   }
+        // })
+      },
+      fail: function(res){
+        console.log(res)
+      }
+    })
   }
 })

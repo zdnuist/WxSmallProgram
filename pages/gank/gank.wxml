@@ -1,7 +1,7 @@
 <view class="container.gank">
 
-  <view id="rootView" wx:for="{{gankInfo}}" wx:for-item="item" wx:key="gank_im">
-  <image style="width: 400px; height: 200px; background-color: #eeeeee;" mode="widthFix" src="{{item.url}}"></image>
+  <view id="rootView" wx:for="{{gankInfo}}" wx:for-item="item" wx:key="gank_im" id="{{item.url}}"  bindtap='showActionSheet'>
+  <image style="width: 400px; height: 200px; background-color: #eeeeee;"  mode="widthFix" src="{{item.url}}" ></image>
 </view>
 
 
