@@ -14,6 +14,6 @@
   width: 100%;
 }
 
-.btn {
+.margin-btn {
   margin: 50rpx;
 }

@@ -7,5 +7,5 @@
       </block>  
 </swiper> 
 
-<button class="btn" bindtap='gotoGank'>GO TO GANK</button>   
+<button class="weui-btn margin-btn" type="primary" plain="true" bindtap='gotoGank'>GO TO GANK</button>   
 

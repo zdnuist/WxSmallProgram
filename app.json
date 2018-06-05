@@ -1,9 +1,9 @@
 {
   "pages": [
+    "pages/home/home",
     "pages/gank/gank",
     "pages/image_get/image_get",
     "pages/index/index",
-    "pages/home/home",
     "pages/logs/logs"
   ],
   "window": {
