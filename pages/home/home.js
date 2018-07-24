@@ -1,14 +1,54 @@
 // pages/home.js
+
+var config = require('../../config.js');
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    imageUrls: [
-      
-    ]
+    advert: [
+    ],
 
+    winHeight: "",//窗口高度
+    currentTab: 0, //预设当前项的值
+    scrollLeft: 0, //tab标题的滚动条位置
+
+  },
+
+  // 滚动切换标签样式
+  switchTab: function (e) {
+    this.setData({
+      currentTab: e.detail.current
+    });
+    this.checkCor();
+    this.changeData(e.detail.current);
+  },
+  // 点击标题切换当前页时改变样式
+  swichNav: function (e) {
+    var cur = e.target.dataset.current;
+    if (this.data.currentTaB == cur) { return false; }
+    else {
+      this.setData({
+        currentTab: cur
+      });
+      
+      this.checkCor();
+      // this.changeData(cur);
+    }
+  },
+  //判断当前滚动超过一屏时，设置tab标题滚动条。
+  checkCor: function () {
+    if (this.data.currentTab > 4) {
+      this.setData({
+        scrollLeft: 300
+      })
+    } else {
+      this.setData({
+        scrollLeft: 0
+      })
+    }
   },
 
   /**
@@ -16,53 +56,45 @@ Page({
    */
   onLoad: function (options) {
     // this.weiboAuth()
-  },
 
-  gotoGank: function(){
-    wx.navigateTo({
-      url: '../gank/gank'
-    })
-  },
-
-  weiboAuth: function () {
-    self = this
-    wx.request({
-      // url: "https://api.weibo.com/2/statuses/home_timeline.json",
-      // url: "https://api.weibo.com/2/friendships/friends.json",
-      // url: "https://api.weibo.com/2/statuses/user_timeline.json",
-      url: "https://api.weibo.com/2/statuses/home_timeline.json",
-      data: {
-        access_token: "2.002yMLvC0FZaJu98e83251catBcgyD",
-        // uid: "2677188293",
-        feature: 2
-      },
-      header: {
-        'content-type': 'application/json'
-      },
+    var that = this;
+    //  高度自适应
+    wx.getSystemInfo({
       success: function (res) {
-        // console.log(res.data)
-        var i = 0
-        for(;i < res.data.statuses.length;i++){
-          var picUrls = res.data.statuses[i].pic_urls
-          // console.log(picUrls)
-          for(var j = 0 ; j < picUrls.length; j++){
-            var picUrl = picUrls[j].thumbnail_pic;
-            // console.log(picUrl)
-            picUrl = picUrl.replace('thumbnail','bmiddle')
-            console.log(picUrl)
-            self.data.imageUrls.push(picUrl)
-          }
-        }
-
-        self.setData({
-          imageUrls: self.data.imageUrls
-        })
-        
-
+        var clientHeight = res.windowHeight,
+          clientWidth = res.windowWidth,
+          rpxR = 750 / clientWidth;
+        var calc = clientHeight * rpxR - 180;
+        console.log(calc)
+        that.setData({
+          winHeight: calc
+        });
       }
-    })
+    });
+
+    this.requestData();
   },
 
+
+  requestData: function(){
+    var self = this;
+    wx.request({
+      url: config.service.advert,
+      success: function(res) {
+        var list = res.data;
+        for(var i = 0 ; i < list.length; i++){
+          var index = list[i].src.indexOf('.jpg');
+          list[i].src = config.service.host + list[i].src.substring(0,index)+ "_small.jpg";
+          console.log(list[i].src);
+        }
+        self.setData({
+          advert: list
+        })
+      }
+    });
+    
+
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -110,5 +142,27 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+
+  jumpNewPage(e) {
+    console.log(e);
+    var url = e.currentTarget.dataset.routerSrc;
+    if(url){
+      // var index = url.indexOf('http');
+      // if(index == 0){
+      //   wx.navigateTo({
+      //     url: '../webpage/webpage?url=' + url
+      //  })
+      // }else{
+      //   wx.navigateTo({
+      //     url: url
+      //  })
+      // }
+
+      wx.previewImage({
+       current: url,
+       urls: [url]
+      });
+    }
   }
 })

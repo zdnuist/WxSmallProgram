@@ -1,11 +1,27 @@
 
- <swiper class="swiper"  autoplay="true" interval="5000" duration="1000">  
-      <block wx:for="{{imageUrls}}" wx:for-index="index" wx:key="*this">  
-        <swiper-item>  
-          <image src="{{item}}" class="slide-image" mode="aspectFit"/>  
-        </swiper-item>  
-      </block>  
-</swiper> 
+<view class = 'index' enable-back-to-top= 'true'> 
+<swiper  autoplay="true" interval="3000" duration="500" circular = "true">
+  <block wx:for="{{advert}}" wx:key = '{{index}}'>
+    <swiper-item class = 'swiper-nav' bindtap = 'jumpNewPage' data-router-src = '{{item.src}}'>
+      <image src="{{item.src}}" class="slide-image" mode = 'widthFix'/>
+    </swiper-item>
+  </block>
+</swiper>
 
-<button class="weui-btn margin-btn" type="primary" plain="true" bindtap='gotoGank'>GO TO GANK</button>   
+<view scroll-x="true" class="tab-h" scroll-left="{{scrollLeft}}">
+  <view class="tab-item {{currentTab==0?'active':''}}" data-current="0" bindtap="swichNav">每日一图</view>
+  <view class="tab-item {{currentTab==1?'active':''}}" data-current="1" bindtap="swichNav">1</view>
+  <view class="tab-item {{currentTab==2?'active':''}}" data-current="2" bindtap="swichNav">2</view>
+</view>
+
+<view class="tab-content" style="height:{{winHeight}}rpx">
+    <scroll-view scroll-y="true" class="scoll-h" bindscrolltolower='onReachBottom'>
+      <view  wx:for="{{orders}}" wx:for-item="item" wx:key="{{item.id}}" bindtap='jumpOrderDetail'  data-order-state="{{item.state}}" id="{{item.id}}">
+       
+
+      </view>
+    </scroll-view>
+  </view>  
+
+</view>
 
