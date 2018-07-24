@@ -1,0 +1,7 @@
+<template name="cell">
+        <view  style="height:{{cellHeight}};width:{{cellHeight}} ; overflow: hidden;" 
+           bindtap='jumpNewPage' data-router-src='{{url}}'>
+            <image src="{{thumb}}"  mode='widthFix'></image>
+        </view>
+      </template>
+      

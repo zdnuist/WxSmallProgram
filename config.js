@@ -12,6 +12,8 @@ var config = {
    //获取广告接口
    advert: `${host}/advert/all`,
 
+   hot: `${host}/hot`,
+
    
  }
 };

@@ -11,45 +11,12 @@ Page({
     advert: [
     ],
 
-    winHeight: "",//窗口高度
-    currentTab: 0, //预设当前项的值
-    scrollLeft: 0, //tab标题的滚动条位置
+    cellHeight:'',
+
+    index: 1
 
   },
 
-  // 滚动切换标签样式
-  switchTab: function (e) {
-    this.setData({
-      currentTab: e.detail.current
-    });
-    this.checkCor();
-    this.changeData(e.detail.current);
-  },
-  // 点击标题切换当前页时改变样式
-  swichNav: function (e) {
-    var cur = e.target.dataset.current;
-    if (this.data.currentTaB == cur) { return false; }
-    else {
-      this.setData({
-        currentTab: cur
-      });
-      
-      this.checkCor();
-      // this.changeData(cur);
-    }
-  },
-  //判断当前滚动超过一屏时，设置tab标题滚动条。
-  checkCor: function () {
-    if (this.data.currentTab > 4) {
-      this.setData({
-        scrollLeft: 300
-      })
-    } else {
-      this.setData({
-        scrollLeft: 0
-      })
-    }
-  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -61,22 +28,19 @@ Page({
     //  高度自适应
     wx.getSystemInfo({
       success: function (res) {
-        var clientHeight = res.windowHeight,
-          clientWidth = res.windowWidth,
-          rpxR = 750 / clientWidth;
-        var calc = clientHeight * rpxR - 180;
-        console.log(calc)
+        var windowWidth = res.windowWidth;
         that.setData({
-          winHeight: calc
+          cellHeight: (windowWidth / 2) + "px"
         });
       }
     });
 
-    this.requestData();
+    this.requestAdvertData();
+    this.requestHotData();
   },
 
 
-  requestData: function(){
+  requestAdvertData: function(){
     var self = this;
     wx.request({
       url: config.service.advert,
@@ -85,16 +49,57 @@ Page({
         for(var i = 0 ; i < list.length; i++){
           var index = list[i].src.indexOf('.jpg');
           list[i].src = config.service.host + list[i].src.substring(0,index)+ "_small.jpg";
-          console.log(list[i].src);
+          // console.log(list[i].src);
         }
         self.setData({
           advert: list
         })
       }
     });
-    
-
   },
+
+  requestHotData: function(){
+    var self = this;
+    wx.request({
+      url: config.service.hot + "?index=" + this.data.index,
+      success: function(res) {
+        
+        var list = res.data.list;
+        self.index = res.data.index;
+        console.log(list.length);
+        for(var i = 0 ; i < list.length; i++){
+          list[i].url = config.service.host + list[i].url;
+          list[i].thumb = config.service.host + list[i].thumb;
+        }
+
+         var pageItems = [];
+         var row = [];
+         var len = list.length;
+         len = Math.floor((len) / 2) * 2;
+         for (var i = 0; i < len; i++) {
+           if ((i + 1) % 2 == 0) {
+             row.push(list[i]);
+             pageItems.push(row);
+             row = [];
+             continue;
+           }
+           else {
+             row.push(list[i]);
+           }
+         }
+
+         console.log(pageItems);
+
+         self.setData({
+           pageItems: pageItems
+         })
+
+      }
+
+    })
+  },
+
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

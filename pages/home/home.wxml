@@ -1,27 +1,29 @@
+<import src="cell.wxml" />
+<view class='index' enable-back-to-top='true'>
+  <swiper autoplay="true" interval="3000" duration="500" circular="true">
+    <block wx:for="{{advert}}" wx:key='{{index}}'>
+      <swiper-item class='swiper-nav' bindtap='jumpNewPage' data-router-src='{{item.src}}'>
+        <image src="{{item.src}}" class="slide-image" mode='widthFix' />
+      </swiper-item>
+    </block>
+  </swiper>
 
-<view class = 'index' enable-back-to-top= 'true'> 
-<swiper  autoplay="true" interval="3000" duration="500" circular = "true">
-  <block wx:for="{{advert}}" wx:key = '{{index}}'>
-    <swiper-item class = 'swiper-nav' bindtap = 'jumpNewPage' data-router-src = '{{item.src}}'>
-      <image src="{{item.src}}" class="slide-image" mode = 'widthFix'/>
-    </swiper-item>
-  </block>
-</swiper>
+  <view class="tab-single">
+    <text class='tab-item.active'>每日图片</text>
+  </view>
 
-<view scroll-x="true" class="tab-h" scroll-left="{{scrollLeft}}">
-  <view class="tab-item {{currentTab==0?'active':''}}" data-current="0" bindtap="swichNav">每日一图</view>
-  <view class="tab-item {{currentTab==1?'active':''}}" data-current="1" bindtap="swichNav">1</view>
-  <view class="tab-item {{currentTab==2?'active':''}}" data-current="2" bindtap="swichNav">2</view>
-</view>
 
-<view class="tab-content" style="height:{{winHeight}}rpx">
-    <scroll-view scroll-y="true" class="scoll-h" bindscrolltolower='onReachBottom'>
-      <view  wx:for="{{orders}}" wx:for-item="item" wx:key="{{item.id}}" bindtap='jumpOrderDetail'  data-order-state="{{item.state}}" id="{{item.id}}">
-       
-
+  <view class="pages-container">
+    <scroll-view  >
+      <view wx:for="{{pageItems}}" wx:key="{{index}}">
+        <view class="pages-row">
+          <template is="cell" data="{{...item[0],cellHeight}}" />
+          <template is="cell" data="{{...item[1],cellHeight}}" />
+        </view>
       </view>
     </scroll-view>
-  </view>  
+  </view>
+
+
 
 </view>
-
