@@ -13,7 +13,11 @@ Page({
 
     cellHeight:'',
 
-    index: 1
+    index: 1,
+
+    oldIndex:1,
+
+    pageItems:[]
 
   },
 
@@ -63,9 +67,13 @@ Page({
     wx.request({
       url: config.service.hot + "?index=" + this.data.index,
       success: function(res) {
-        
+        self.data.oldIndex = self.data.index;
         var list = res.data.list;
-        self.index = res.data.index;
+        var len = list.length;
+        if(len == 0){
+          return;
+        }
+        self.data.index = res.data.index;
         console.log(list.length);
         for(var i = 0 ; i < list.length; i++){
           list[i].url = config.service.host + list[i].url;
@@ -74,7 +82,7 @@ Page({
 
          var pageItems = [];
          var row = [];
-         var len = list.length;
+         
          len = Math.floor((len) / 2) * 2;
          for (var i = 0; i < len; i++) {
            if ((i + 1) % 2 == 0) {
@@ -88,10 +96,12 @@ Page({
            }
          }
 
-         console.log(pageItems);
+         var resultPageItems = self.data.pageItems.concat(pageItems);
+
+         console.log(resultPageItems);
 
          self.setData({
-           pageItems: pageItems
+           pageItems: resultPageItems
          })
 
       }
@@ -139,6 +149,14 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
+    console.log("onReachBottom");
+
+    if(this.data.oldIndex == this.data.index){
+      return;
+    }
+
+    this.requestHotData();
+    
 
   },
 
